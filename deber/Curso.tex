@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber, style=apa, sorting=ynt]{biblatex} %sorting ordena biblio en funcion año, nombre, titulo
+\addbibresource{deber.bib}
+
+\title{Deber Curso Overleaf}
+\author{Kevin I. Flores}
+\date{April 2020}
+
+\begin{document}
+
+\maketitle
+
+\section*{Teorema maestro}
+En el análisis de algoritmos, el \textbf{teorema maestro} proporciona una solución sencilla en términos asintóticos (usando una Cota superior asintótica) para ecuaciones de recurrencia que ocurren en muchos algoritmos recursivos tales como en el Algoritmo divide y vencerás. Fue popularizado por el libro \textit{Introducción a los algoritmos} por Cormen, Leiserson, Rivest, y Stein, en el cual fue tanto introducido como probado formalmente. No todas las ecuaciones de recurrencia pueden ser resueltas con el uso del teorema maestro.
+%\vspace{1.5cm}
+
+\section*{Introduccion}
+Considere un problema que puede ser resuelto a través de un algoritmo recursivo como el siguiente:\\
+procedimiento T( n : tamaño del problema ) definición:\\
+if n $<$ 1 then exit\\
+Hacer trabajo f(n)\\
+T(n/b)\\
+T(n/b)\\
+...repetir una cantidad de  a veces...\\
+T(n/b)\\
+fin procedimiento\\
+
+En el algoritmo mostrado arriba se divide el problema original en una cantidad menor de subproblemas de manera recursiva, cada uno de estos subproblemas siendo del tamaño de n/b. Esto podría ser visualizado como la construcción de un árbol de llamadas al problema, siendo cada nodo del árbol una instancia recursiva del mismo y sus hijos siendo instancias de las llamadas subsiguientes. En el ejemplo de arriba, cada nodo tendría un número a de hijos. Cada nodo hará la cantidad de trabajo correspondiente al tamaño del subproblema n, pasado a esa instancia en particular, estando la cantidad de trabajo realizado determinado por $f(n)$. El trabajo total realizado por todas las llamadas del árbol es la suma de los trabajos hechos por cada uno de los nodos del árbol.\\
+
+Algoritmos como el descrito arriba pueden ser representados por una relación de recurrencia como la siguiente: $T(n)=a*T*(\frac{n}{b})+f(n)$. Esta relación de recurrencia puede ser sucesivamente sustituida en sí misma y expandida hasta obtener una expresión que represente la cantidad total de trabajo$^1$.\\
+
+El teorema maestro nos permite fácilmente calcular el tiempo de ejecución de este tipo de algoritmos recursivos en notación de Cota superior asintótica, sin la necesidad de hacer la expansión de las distintas llamadas recursivas.\\
+
+\section*{Forma Generica}
+El teorema maestro sirve para resolver relaciones recursivas de la siguiente forma:\\
+$T(n)=a*T*(\frac{n}{b})+f(n) \hspace{1cm} donde \hspace{1cm} a\geq 1, b>1$
+En la aplicación de análisis de algoritmos recursivos, las constantes y funciones toman los siguientes significados:\\
+\begin{itemize}
+    \item n es el tamaño del problema a resolver.
+    \item a es el número de subproblemas en la recursión.
+    \item n/b el tamaño de cada subproblema. .
+    \item $f(n)$ es el costo del trabajo hecho fuera de las llamadas recursivas, que incluye el costo de la división del problema y el costo de unir las soluciones de los subproblemas.
+\end{itemize}
+Luego, es posible realizar una cota en notación Big O en los siguientes tres casos:
+\subsection*{Caso 1}
+\subsubsection*{Forma Generica}
+Si $f(n)=O(n^{c}) \hspace{1cm} donde \hspace{1cm} c<\log_{b}a$ (usando Cota superior asintótica)\\
+entonces:\\
+$T(n)=\Theta(n^{\log_{b}a})$
+
+\subsubsection*{Ejemplo}
+$T(n)=8T(\frac{n}{2})+1000n^{2}$\\
+Como puede verse en la fórmula de arriba:\\
+$a=8, b=2, f(n)=1000n^{2}$, entonces\\
+$f(n)=O(n^{c}, donde c=2$\\
+Luego, vemos que se cumple la condición del caso 1:\\
+$\log_{b}a=\log_{2}8=3>c$ \\
+Luego por el teorema maestro tenemos que \\
+$T(n)=\Theta(n^{\log_{b}a})=\Theta(n^{3})$\\
+
+
+\subsection*{Caso 2}
+\subsubsection*{Forma Generica}
+Si es verdad que para alguna constante $k\geq0$, que:\\
+$f(n)=\Theta(n^{c}\log^{k}n) \hspace{1cm} donde \hspace{1cm} c=\log_{b}a$\\
+Entonces:\\
+$T(n)=\Theta(n^{c}\log^{k+1}n)$\\
+\subsubsection*{Ejemplo}
+$T(n)=2T(\frac{n}{2})+10n$\\
+Como podemos ver en la fórmula de arriba, las variables tienen los siguientes valores:\\
+a=2\\
+b=2\\
+c=1\\
+$f(n)=10n$\\
+$f(n)=\Theta(n^{c}\log^{k}n) \hspace{1cm} donde \hspace{1cm} c=1,k=0$\\
+Luego, nos fijamos que cumpla la condición del caso 2:\\
+$\log_{b}a=\log_{2}2=1, \hspace{1cm} luego, se cumple que \hspace{1cm} c=\log_{b}a$\\
+Entonces por el segundo caso del teorema maestro:\\
+$T(n)=\Theta(n^{\log_{b}a}\log^{k+1}n)=\Theta(n^{1}\log^{1}n=\Theta(n\log n)$\\
+Dando de esa manera que la relación de recurrencia de $T(n) es \Theta(n\log n)$.
+
+\subsection*{Caso 3}
+\subsubsection*{Forma Generica}
+Si es verdad que:
+$f(n)=\Omega(n^{c}) \hspace{1cm} donde \hspace{1cm} c>\log_{b}a$\\
+Y si es verdad además que:\\
+$af({\frac{n}{b}})\leq kf(n) \hspace{1cm} para alguna constante \hspace{1cm} k<1 \hspace{1cm} y suficientemente grande n$\\
+Entonces:\\
+$T(n)=\Theta (f(n))$
+\subsubsection*{Ejemplo}
+$T(n)=2T({\frac{n}{2})+n^{2}}$\\
+Como puede verse en la fórmula de arriba, las variables obtienen los siguientes valores:\\
+$a=2, b=2, f(n)=n^{2}$\\
+$f(n)=\Omega t(n^{c}), \hspace{1cm} donde \hspace{1cm} c=2$\\
+Luego se comprueba que satisface la condición del caso 3:\\
+$\log_{b}a=\log_{2}2=1,y por lo tanto se cumple que, c>\log_{b}a$\\
+La condición también se cumple:\\
+$2({\frac{n^{2}}{4}})\leq kn^{2}, eligiendo k=1/2$\\
+Entonces por el tercer caso del teorema maestro:\\
+$T(n)=\Theta(f(n))=\Theta(n^{2})$.\\
+Por consiguiente la relación de recurrencia $T(n)$ es in $\Theta(n^2)$.\\
+\cite{Theorem1998}
+\cite{wikipedia2019}
+\cite{Cormen2001}
+\printbibliography[]
+
+\end{document}
